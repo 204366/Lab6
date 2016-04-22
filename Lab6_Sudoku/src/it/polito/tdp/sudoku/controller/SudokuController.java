@@ -5,9 +5,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import com.sun.glass.events.MouseEvent;
+
 import it.polito.tdp.sudoku.model.SudokuGenerator;
+import it.polito.tdp.sudoku.model.SudokuModel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 
 public class SudokuController {
@@ -15,6 +19,10 @@ public class SudokuController {
 	final static int levelEasy = 45;
 	final static int levelAdvanced = 50;
 	final static int levelExpert = 55;
+	int [][] matrix;
+	
+	@FXML
+    private ChoiceBox<Integer> choiceBox;
 	
     @FXML
     private ResourceBundle resources;
@@ -268,16 +276,32 @@ public class SudokuController {
     List<Label> labelList = new ArrayList<Label>(); 
     
     @FXML
+    void doChoice(MouseEvent event) {
+
+    }
+    
+    @FXML
     void doGenerate(ActionEvent event){
     	// Per generare un nuova nuova griglia di Sudoku
 		SudokuGenerator sg = new SudokuGenerator();
-		int [][] matrix = sg.nextBoard(levelExpert);
+		if(choiceBox.getValue() == 45){
+			matrix = sg.nextBoard(levelEasy);
+		}
+		if(choiceBox.getValue() == 50){
+			matrix = sg.nextBoard(levelAdvanced);
+		}
+		if(choiceBox.getValue() == 55){
+			 matrix = sg.nextBoard(levelExpert);
+		}
+		
 		
 		printMatrixOnScreen(matrix);
     }
     
     @FXML
     void doSolve(ActionEvent event){
+    	SudokuModel sm = new SudokuModel();
+    	this.printMatrixOnScreen(sm.funzioneRicorsiva(0, matrix));
     	
     }
     
@@ -446,6 +470,7 @@ public class SudokuController {
         labelList.add(lbl79);
         labelList.add(lbl80);
         labelList.add(lbl81);
+        choiceBox.getItems().addAll(levelEasy, levelAdvanced, levelExpert);
     }
     
     
